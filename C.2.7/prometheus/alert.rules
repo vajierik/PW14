@@ -1,0 +1,27 @@
+groups: 
+- name: example
+  rules:
+  - alert: PrometheusTargetMissing
+    expr: up == 0
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Prometheus target missing (instance {{ $labels.instance }})"
+      description: "A Prometheus target has disappeared. An exporter might be crashed. VALUE = {{ $value }}  LABELS: {{ $labels }}"
+
+  - alert: LMS Skillfactory status-code changed
+    expr: probe_http_status_code{instance="https://lms.skillfactory.ru", job="blackbox"} != 200
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "lms.skilfactory.ru code changed"
+  
+  - alert: LMS Skillfactory site duration
+    expr: sum(probe_http_duration_seconds{instance="https://lms.skillfactory.ru"}) > 2
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "lms.skilfactory.ru site duration more 2 seconds"
